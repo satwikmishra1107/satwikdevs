@@ -30,13 +30,14 @@ export const EXPERIENCES: Experience[] = [
       { label: "EVENT CONCURRENCY", value: "50K/sec" },
       { label: "MONITORING AUDIT", value: "REAL-TIME" },
     ],
-  },{
+  },
+  {
     id: "exp-2",
     role: "Systems Engineer",
     company: "TCS",
     period: "2024 — PRESENT",
     highlights: [
-      "Developed an ERMS as a , performance optimization, Legacy migration, and production tooling.",
+      "Developed a custom Enterprise Resource Management System (ERMS) to govern and track end-to-end Project Delivery Notice workflows, using a scalable, role-based access framework for engineering teams.Migrated legacy API requests to a REST API architecture and implemented Java multithreading, significantly lowering infrastructure costs while increasing query efficiency and backend throughput.",
     ],
     techStack: ["Java", "Spring Boot", "PL/SQL", "RestAPI", "Linux RHEL"],
     metrics: [
@@ -44,7 +45,7 @@ export const EXPERIENCES: Experience[] = [
       { label: "LEGACY MODERNIZATION", value: "CORE SYSTEM" },
       { label: "THROUGHPUT STABILITY", value: "99.999%" },
     ],
-  }
+  },
 ];
 
 export const PROJECTS: Project[] = [
@@ -52,13 +53,7 @@ export const PROJECTS: Project[] = [
     id: "proj-1",
     title: "CHUNKY DISCORD",
     description: `Was running out of storage and that led to a simple question: why build another storage server when Discord already stores files for free? \n Chunky Discord splits large files into chunks, as there's a rate limit in discord, tags them with a SHA-256 hash for identification and integrity checks, and stores them in a private Discord server. So that you are left with the lightweight metadata which stays on the server, allowing files to be located, verified, reassembled, and retrieved on demand and in realtime.`,
-    tags: [
-      "ReactJS",
-      "NodeJS",
-      "AWS EC2",
-      "Distributed Storage",
-      "Rate Limiting",
-    ],
+    tags: ["ReactJS", "NodeJS", "Firebase", "AWS EC2"],
     thumbnail: ProjectOne,
     demoUrl: "#",
     status: "UNDER MAINTENANCE",
@@ -74,10 +69,10 @@ export const PROJECTS: Project[] = [
     title: "PDN Tracker (ERMS)",
     description:
       "When the existing PDN tracking tool had to be retired because of security concerns, the workflow temporarily fell back to Excel. PDN Tracker was built from scratch to replace it with a role-based system for developers, reviewers, testers, and deployers, taking each delivery from submission through review and deployment while keeping every handoff traceable.",
-    tags: ["Go", "Kubernetes API", "GraphQL", "TypeScript", "GSAP"],
+    tags: ["NextJS", "Node.js", "MongoDB", "Java/SpringBoot"],
     thumbnail: ProjectTwo,
     demoUrl: "#",
-    status:"UNDER MAINTENANCE",
+    status: "UNDER MAINTENANCE",
     githubUrl: "https://github.com/satwikmishra1107/PDN-Tracker",
     stats: [
       { label: "BUILD DEPLOY TIME", value: "<12s" },

@@ -140,7 +140,6 @@ export default function Projects() {
                     {/* Card Top: Image Container with Hover Zoom */}
                     {/* Inside your project mapping loop */}
                     <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-neutral-900">
-                      {/* Removed `will-change-transform` from the class list */}
                       <img
                         src={project.thumbnail}
                         alt={project.title}
@@ -156,12 +155,24 @@ export default function Projects() {
                     <div className="p-6 md:p-8 flex-1 flex flex-col justify-between relative z-10">
                       {/* Project specific specifications grid */}
                       <div>
+                        <div>
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {project.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="font-mono text-[8px] tracking-widest text-yellow-400 bg-neutral-900/60 px-2 py-0.5 rounded border border-yellow-800"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                         {/* Embedded Micro Status Indicator */}
-                        <div className="border-t border-neutral-900/50 font-mono text-[10px] text-neutral-500">
+                        {/* <div className="border-t border-neutral-900/50 font-mono text-[10px] text-neutral-500">
                           STATUS: <span className={`font-semibold ${getStatusColor(project.status)}`}>
                             {project.status}
                           </span>
-                        </div>
+                        </div> */}
                       </div>
 
                     </div>

@@ -78,7 +78,7 @@ export default function Navbar() {
           <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
         </span>
         <span className="font-mono text-xs tracking-wider font-semibold text-neutral-300">
-          Hey friend // <span className="text-orange-400">Welcome</span>
+          Hello there // <span className="text-orange-400">Welcome</span>
         </span>
       </div>
 

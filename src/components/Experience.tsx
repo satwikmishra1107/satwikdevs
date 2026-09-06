@@ -69,7 +69,7 @@ export default function Experience() {
                       </div>
 
                       {/* Experience Summary Paragraph */}
-                      <p className={`font-sans text-xs text-neutral-300 font-light leading-relaxed line-clamp-3 ${isEven ? 'lg:text-right lg:ml-auto' : ''
+                      <p className={`font-sans text-xs text-neutral-300 font-light leading-relaxed ${isEven ? 'lg:text-right lg:ml-auto' : ''
                         }`}>
                         {exp.highlights}
                       </p>
