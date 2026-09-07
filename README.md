@@ -1,8 +1,10 @@
-# satwikdevs
+# $\color{green}{\text{satwikdevs}}$
 
 Personal portfolio website hosted under my own domain. Used to showcase projects and host upcoming utility tools I'll build along the way.
 
-Live: [satwikdevs.in](https://satwikdevs.in/)
+<img width="1908" height="952" alt="image" src="https://github.com/user-attachments/assets/d8cc3362-810b-4f5d-880e-f68cf33565fc" />
+
+Live: https://satwikdevs.in
 
 ## Tech Stack
 
