@@ -1,20 +1,57 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# satwikdevs
 
-# Run and deploy your AI Studio app
+Personal portfolio website hosted under my own domain. Used to showcase projects and host upcoming utility tools I'll build along the way.
 
-This contains everything you need to run your app locally.
+Live: [satwikdevs.in](https://satwikdevs.in/)
 
-View your app in AI Studio: https://ai.studio/apps/eb7110cf-5877-48bb-8fef-15a566be732e
+## Tech Stack
 
-## Run Locally
+- **Framework:** React 19 + TypeScript, built with Vite
+- **Styling:** Tailwind CSS 4
+- **Animation:** GSAP, Motion, Lenis (smooth scroll)
+- **3D / WebGL:** Three.js, React Three Fiber, React Three Drei, React Three Postprocessing, Spline
+- **Backend:** Express (local dev server), Google Gemini API (`@google/genai`)
+- **Hosting:** Cloudflare
+- **Domain:** Porkbun
 
-**Prerequisites:**  Node.js
+## Prerequisites
 
+- Node.js (LTS recommended)
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Setup
+
+```bash
+git clone https://github.com/satwikmishra1107/satwikdevs.git
+cd satwikdevs
+npm install
+```
+
+## Scripts
+
+| Command           | Description                          |
+|--------------------|---------------------------------------|
+| `npm run dev`      | Starts the Vite dev server on port 3000 |
+| `npm run build`    | Builds the app for production (`dist/`) |
+| `npm run preview`  | Serves the production build locally    |
+| `npm run lint`     | Type-checks the project (`tsc --noEmit`) |
+| `npm run clean`    | Removes `dist/` and `server.js`        |
+
+## Project Structure
+
+```
+satwikdevs/
+├── public/          # Static assets
+├── src/             # App source (components, scenes, shaders, etc.)
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+## Deployment
+
+The site is built with `npm run build` and deployed to Cloudflare, served under a custom domain purchased through Porkbun.
+
+## License
+
+No license specified — all rights reserved.
