@@ -1,8 +1,9 @@
-import React, { useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
-import Image from '../assets/me_in_suit_cropped.png';
+import Image from '../assets/portrait.webp';
+import { PERF_FLAGS, reportRevealFrames, type FrameSample } from '../lib/perf';
 
 const CanvasRevealShader = {
   vertexShader: `
@@ -34,7 +35,10 @@ const CanvasRevealShader = {
       float localProgress = smoothstep(start, end, uProgress);
       float revealAlpha = smoothstep(0.9, 1.0, localProgress);
 
-      gl_FragColor = vec4(texColor.rgb, texColor.a * revealAlpha);
+      // The image already vignettes; this just lets the base melt into the page
+      float edgeFade = smoothstep(0.0, 0.2, vUv.y);
+
+      gl_FragColor = vec4(texColor.rgb, texColor.a * revealAlpha * edgeFade);
     }
   `
 };
@@ -119,8 +123,9 @@ const ParticleFlightShader = {
       float n = snoise(position * 0.35 + vec3(0.0, 0.0, uTime * 0.12));
       vec3 flow = vec3(sin(n * 6.28 + seed), cos(n * 6.28 + seed), n) * turbulence * 1.4;
 
-      vec3 streamDir = normalize(vec3(1.3, 0.85, -0.4));
-      float travelDist = 6.0 + random(uv) * 2.0; 
+      // Particles stream in from off-screen right, crossing the whole hero
+      vec3 streamDir = normalize(vec3(1.6, 0.55, -0.4));
+      float travelDist = 9.0 + random(uv) * 3.5;
       vec3 scatterOrigin = position + streamDir * travelDist;
       vec3 travelDir = streamDir;
 
@@ -166,8 +171,9 @@ const ParticleFlightShader = {
       vec3 coreTone = vec3(1.0, 0.6, 0.1);   // Bright Yellow-Orange
       vec3 tint = mix(flightTone, coreTone, vEnergy);
 
-      float glowMultiplier = mix(3.0, 1.0, vFlightProgress) + vEnergy * 1.5;
-      vec3 flyingColor = tint * texColor.rgb * glowMultiplier;
+      float glowMultiplier = mix(3.2, 1.0, vFlightProgress) + vEnergy * 1.6;
+      // Base emission so particles from dark areas (suit, hair) still glow in flight
+      vec3 flyingColor = tint * (texColor.rgb + 0.35) * glowMultiplier;
 
       float fadeOut = 1.0 - smoothstep(0.9, 1.0, vFlightProgress);
       float alpha = texColor.a * (1.0 - r) * fadeOut;
@@ -177,13 +183,28 @@ const ParticleFlightShader = {
   `
 };
 
+const REVEAL_DURATION = 4.2; // seconds
+// Optional (?warmup=1): invisible frames rendered before the clock starts, so
+// first-render costs (shader compile, texture upload) land before any motion
+const WARMUP_FRAMES = PERF_FLAGS.warmupFrames;
+
 interface PortraitProps {
-  progressRef: React.RefObject<number>;
+  onRevealStart?: () => void;
+  onRevealEnd?: () => void;
 }
 
-export default function Portrait({ progressRef }: PortraitProps) {
+export default function Portrait({ onRevealStart, onRevealEnd }: PortraitProps) {
   const canvasMatRef = useRef<THREE.ShaderMaterial>(null);
   const brushMatRef = useRef<THREE.ShaderMaterial>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const warmupRef = useRef(0);
+  const framesRef = useRef<FrameSample[]>([]);
+  const lastFrameRef = useRef<number | null>(null);
+  const doneRef = useRef(false);
+  const reduceMotion = useMemo(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    []
+  );
 
   const texture = useTexture(Image) as THREE.Texture;
   const { width, height } = useThree(state => state.viewport);
@@ -204,39 +225,70 @@ export default function Portrait({ progressRef }: PortraitProps) {
     uTime: { value: 0.0 }
   }), [texture]);
 
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    if (WARMUP_FRAMES === 0) return;
+    gl.initTexture(texture);
+    gl.compile(scene, camera);
+  }, [gl, scene, camera, texture]);
+
+  const recordFrame = (t: number) => {
+    if (!PERF_FLAGS.perf) return;
+    const now = performance.now();
+    if (lastFrameRef.current !== null) {
+      framesRef.current.push({ dt: now - lastFrameRef.current, t });
+    }
+    lastFrameRef.current = now;
+  };
+
+  // One-shot, time-driven reveal: plays once on load and stays assembled
   useFrame((state) => {
-    if (canvasMatRef.current && brushMatRef.current) {
-      // 1. Keep time moving for fluid swirls (This must run every frame)
-      brushMatRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+    if (doneRef.current || !canvasMatRef.current || !brushMatRef.current) return;
 
-      const target = progressRef.current;
-      const current = canvasMatRef.current.uniforms.uProgress.value;
+    if (warmupRef.current < WARMUP_FRAMES) {
+      warmupRef.current++;
+      recordFrame(-1);
+      return;
+    }
 
-      // Calculate the absolute difference between where we are and where we need to be
-      const diff = Math.abs(target - current);
+    const now = state.clock.elapsedTime;
+    if (startTimeRef.current === null) {
+      startTimeRef.current = now;
+      onRevealStart?.();
+    }
 
-      // 2. Early exit logic: Only calculate lerp if the difference is meaningful
-      if (diff > 0.001) {
-        const smoothProgress = THREE.MathUtils.lerp(current, target, 0.08);
-        canvasMatRef.current.uniforms.uProgress.value = smoothProgress;
-        brushMatRef.current.uniforms.uProgress.value = smoothProgress;
-      } else if (current !== target) {
-        // 3. Snap directly to target to kill microscopic floating-point math loops
-        canvasMatRef.current.uniforms.uProgress.value = target;
-        brushMatRef.current.uniforms.uProgress.value = target;
-      }
+    const t = reduceMotion
+      ? 1
+      : Math.min((now - startTimeRef.current) / REVEAL_DURATION, 1);
+    const progress = 1 - Math.pow(1 - t, 2); // ease-out
+    recordFrame(t);
+
+    brushMatRef.current.uniforms.uTime.value = now;
+    canvasMatRef.current.uniforms.uProgress.value = progress;
+    brushMatRef.current.uniforms.uProgress.value = progress;
+
+    if (t >= 1) {
+      doneRef.current = true;
+      if (PERF_FLAGS.perf) reportRevealFrames(framesRef.current);
+      onRevealEnd?.();
     }
   });
 
   const img = texture.image as HTMLImageElement | undefined;
   const imageAspect = img ? img.width / img.height : 1;
-  const planeHeight = height * 0.7;
-  const planeWidth = planeHeight * imageAspect;
 
-  const groupXOffset = -width / 4;
+  // Landscape: portrait sits on the left half. Narrow screens: top of the hero.
+  const isLandscape = width > height * 1.1;
+  const planeHeight = isLandscape
+    ? height * 0.66
+    : Math.min(height * 0.25, (width * 0.55) / imageAspect);
+  const planeWidth = planeHeight * imageAspect;
+  const groupPosition: [number, number, number] = isLandscape
+    ? [-width * 0.185, -height * 0.04, 0]
+    : [0, height / 2 - planeHeight / 2 - height * 0.1, 0];
 
   return (
-    <group position={[groupXOffset, 0, 0]}>
+    <group position={groupPosition}>
       <mesh>
         <planeGeometry args={[planeWidth, planeHeight, 1, 1]} />
         <shaderMaterial

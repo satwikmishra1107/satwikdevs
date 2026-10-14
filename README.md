@@ -11,8 +11,7 @@ Live: https://satwikdevs.in
 - **Framework:** React 19 + TypeScript, built with Vite
 - **Styling:** Tailwind CSS 4
 - **Animation:** GSAP, Motion, Lenis (smooth scroll)
-- **3D / WebGL:** Three.js, React Three Fiber, React Three Drei, React Three Postprocessing, Spline
-- **Backend:** Express (local dev server), Google Gemini API (`@google/genai`)
+- **3D / WebGL:** Three.js, React Three Fiber, React Three Drei, React Three Postprocessing
 - **Hosting:** Cloudflare
 - **Domain:** Porkbun
 
@@ -36,7 +35,7 @@ npm install
 | `npm run build`    | Builds the app for production (`dist/`) |
 | `npm run preview`  | Serves the production build locally    |
 | `npm run lint`     | Type-checks the project (`tsc --noEmit`) |
-| `npm run clean`    | Removes `dist/` and `server.js`        |
+| `npm run clean`    | Removes `dist/`                        |
 
 ## Project Structure
 

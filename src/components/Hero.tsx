@@ -1,93 +1,113 @@
+import { Suspense, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import Spline from '@splinetool/react-spline';
-import { ChevronDown } from 'lucide-react';
-import { useLayoutEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Canvas } from '@react-three/fiber';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import Portrait from './Portrait';
+import { PROFILE, RESUME_URL } from '../data';
+import { scrollToId } from '../lib/scroll';
+import { PERF_FLAGS } from '../lib/perf';
 
-gsap.registerPlugin(ScrollTrigger);
+// Text lands just as the portrait finishes assembling
+const TEXT_DELAY_MS = 2600;
+// If WebGL or the texture fails, never leave the hero empty
+const FALLBACK_MS = 4500;
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [showSpline, setShowSpline] = useState(true);
+  const [showText, setShowText] = useState(false);
+  const [settled, setSettled] = useState(false);
 
-  // Replaced IntersectionObserver with GSAP ScrollTrigger
-  useLayoutEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top 50%',
-        end: 'bottom -50%', // Replicates rootMargin: '50% 0px 50% 0px'
-        onToggle: (self) => setShowSpline(self.isActive),
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
+  useEffect(() => {
+    const id = setTimeout(() => setShowText(true), FALLBACK_MS);
+    return () => clearTimeout(id);
   }, []);
 
-  const handleScrollTo = (targetId: string) => {
-    const el = document.getElementById(targetId);
-    if (!el) return;
-
-    if ((window as any).lenis) {
-      (window as any).lenis.scrollTo(el);
-    } else {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleRevealStart = () => {
+    setTimeout(() => setShowText(true), TEXT_DELAY_MS);
   };
+
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 16 },
+    animate: showText ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+    transition: { duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] as const },
+  });
 
   return (
     <section
       id="hero"
-      ref={sectionRef}
-      className="relative min-h-screen w-full flex flex-col justify-between bg-[#050505] overflow-hidden pt-24"
+      className="relative h-[100svh] min-h-[600px] w-full overflow-hidden"
     >
-      {/* Full-screen Spline Canvas */}
-      <div className="absolute inset-0 w-full h-full z-0 pointer-events-auto">
-        {showSpline && (
-          <Spline
-            scene="https://prod.spline.design/97sO5r6uWz6sOIzY/scene.splinecode?v=2"
-            className="w-full h-full block"
-          />
-        )}
+      {/* Warm key light behind the portrait */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_55%_60%_at_50%_35%,rgba(249,115,22,0.10),transparent_70%)] lg:bg-[radial-gradient(ellipse_38%_60%_at_31%_45%,rgba(249,115,22,0.2),transparent_70%)]" />
+
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Canvas
+          camera={{ position: [0, 0, 4.5], fov: 50 }}
+          dpr={PERF_FLAGS.dpr ?? [1, 1.5]}
+          frameloop={settled ? 'demand' : 'always'}
+        >
+          <Suspense fallback={null}>
+            <Portrait
+              onRevealStart={handleRevealStart}
+              onRevealEnd={() => setSettled(true)}
+            />
+          </Suspense>
+          {PERF_FLAGS.bloom && (
+            <EffectComposer multisampling={0}>
+              <Bloom mipmapBlur luminanceThreshold={0.9} luminanceSmoothing={0.2} intensity={0.9} radius={0.7} />
+            </EffectComposer>
+          )}
+        </Canvas>
       </div>
 
-      {/* Main hero central text overlay pushed to the bottom */}
-      <div className="relative z-20 flex-1 flex flex-col justify-end items-center px-4 text-center max-w-4xl mx-auto pb-4 pointer-events-none">
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-sm sm:text-base md:text-lg text-neutral-400 max-w-2xl font-sans mt-8 leading-relaxed font-light"
-        >
-          We've always defined ourselves by the ability to overcome the impossible.
-          <br/>
-          Somewhere something incredible is waiting to be known.
-        </motion.p>
-      </div>
+      {/* Keeps text legible where it overlaps the portrait on narrow screens */}
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#050505] via-[#050505]/85 to-transparent z-10 pointer-events-none lg:hidden" />
 
-      {/* Subtle bottom scroll explorer */}
-      <div className="w-full py-8 flex flex-col items-center justify-center relative z-20 pointer-events-auto">
-        <button
-          onClick={() => handleScrollTo('about')}
-          className="group flex flex-col items-center gap-1.5 text-neutral-500 hover:text-orange-300 transition-colors duration-300 font-mono text-[10px] tracking-widest cursor-pointer"
-        >
-          {/* <span>SCROLL TO EXPLORE</span> */}
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+      <div className="relative z-20 h-full max-w-7xl mx-auto px-6 md:px-12 xl:px-24 flex flex-col justify-end lg:justify-center pb-24 lg:pb-0">
+        <div className="max-w-xl lg:ml-auto lg:w-[44%]">
+          <motion.p
+            {...fadeUp(0)}
+            className="font-mono text-xs tracking-wider text-neutral-500 mb-5"
           >
-            <ChevronDown className="w-4 h-4 text-orange-300/80 group-hover:text-orange-300" />
-          </motion.div>
-        </button>
-      </div>
-      {/* Performance-friendly gradient fade to blend the section border */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent z-20 pointer-events-none" />
+            {PROFILE.role}
+          </motion.p>
 
-      {/* Zero-lag solid block to hide the Spline watermark */}
-      <div className="absolute bottom-0 right-0 w-44 h-14 bg-[#050505] z-20 pointer-events-none" />
+          <motion.h1
+            {...fadeUp(0.1)}
+            className="font-display text-5xl sm:text-6xl xl:text-7xl font-semibold text-white tracking-tight leading-[0.95]"
+          >
+            {PROFILE.name}
+          </motion.h1>
+
+          <motion.p
+            {...fadeUp(0.2)}
+            className="mt-6 text-base sm:text-lg text-neutral-400 font-light leading-relaxed"
+          >
+            {PROFILE.summary}
+          </motion.p>
+
+          <motion.div {...fadeUp(0.3)} className="mt-10 flex items-center gap-8 text-sm">
+            <button
+              onClick={() => scrollToId('projects')}
+              className="group inline-flex items-center gap-2 text-white cursor-pointer"
+            >
+              <span className="border-b border-orange-400/60 group-hover:border-orange-400 pb-0.5 transition-colors">
+                View work
+              </span>
+              <ArrowDown className="w-4 h-4 text-orange-400 group-hover:translate-y-0.5 transition-transform" />
+            </button>
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="group inline-flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors"
+            >
+              Resume
+              <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

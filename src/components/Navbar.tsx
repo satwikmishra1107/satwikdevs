@@ -1,114 +1,79 @@
-import { useState, useEffect } from 'react';
-import { Terminal, Cpu, Layers, Disc, Hammer } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { PROFILE, RESUME_URL } from '../data';
+import { scrollToId, scrollToTop } from '../lib/scroll';
 
-const SystemClock = () => {
-  const [systemTime, setSystemTime] = useState('');
-
-  useEffect(() => {
-    const updateTime = () => {
-      const localTime = new Date().toLocaleTimeString('en-US', {
-        hour12: false,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZoneName: 'short',
-      });
-
-      setSystemTime(localTime);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return <>{systemTime || 'UPDATING CLOCK_'}</>;
-};
+const NAV_ITEMS = [
+  { id: 'about', label: 'About', mobile: false },
+  { id: 'projects', label: 'Work', mobile: true },
+  { id: 'experience', label: 'Experience', mobile: false },
+  { id: 'contact', label: 'Contact', mobile: true },
+];
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('hero');
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const sections = ['hero', 'about', 'experience', 'projects', 'footer'];
-    const elements = sections
+    const elements = ['hero', ...NAV_ITEMS.map((i) => i.id)]
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id);
         });
       },
-      {
-        rootMargin: '-40% 0px -40% 0px',
-        threshold: 0,
-      }
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
     );
 
     elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const navItems = [
-    { id: 'hero', label: 'HERO', icon: Cpu },
-    { id: 'about', label: 'ABOUT', icon: Layers },
-    { id: 'experience', label: 'EXPERIENCE', icon: Disc },
-    { id: 'projects', label: 'PROJECTS', icon: Hammer },
-    { id: 'footer', label: 'CONTACT', icon: Terminal },
-  ];
 
   return (
     <header
-      id="hud-navbar"
-      className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 py-4 md:px-12 pointer-events-none"
+      className={`fixed top-0 inset-x-0 z-50 transition-colors duration-300 ${
+        scrolled ? 'bg-[#050505]/85 backdrop-blur-md border-b border-neutral-900' : 'border-b border-transparent'
+      }`}
     >
-      <div className="flex items-center gap-3 bg-black/95 border border-neutral-800/80 px-4 py-2 rounded-full pointer-events-auto shadow-[0_0_10px_rgba(249,115,22,0.1)]">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
-        </span>
-        <span className="font-mono text-xs tracking-wider font-semibold text-neutral-300">
-          Hello there // <span className="text-orange-400">Welcome</span>
-        </span>
-      </div>
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 xl:px-24 h-16">
+        <button
+          onClick={scrollToTop}
+          className="font-display text-sm font-semibold text-white tracking-tight cursor-pointer"
+        >
+          {PROFILE.name}
+        </button>
 
-      <nav className="hidden md:flex items-center gap-1 bg-black/95 border border-neutral-800/80 p-1.5 rounded-full pointer-events-auto">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeSection === item.id;
-          return (
+        <nav className="flex items-center gap-5 sm:gap-7 text-sm">
+          {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.id)}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono text-[11px] tracking-wider transition-all duration-300 ${isActive
-                ? 'bg-gradient-to-r from-orange-950/40 to-amber-950/40 border border-orange-500/50 text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.15)]'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-900/50 border border-transparent'
-                }`}
+              onClick={() => scrollToId(item.id)}
+              className={`${item.mobile ? '' : 'hidden md:inline'} transition-colors cursor-pointer ${
+                activeSection === item.id ? 'text-white' : 'text-neutral-500 hover:text-neutral-200'
+              }`}
             >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-orange-400' : 'text-neutral-500'}`} />
               {item.label}
             </button>
-          );
-        })}
-      </nav>
-
-      <div className="hidden lg:flex flex-col items-end bg-black/95 border border-neutral-800/80 px-4 py-2 rounded-xl pointer-events-auto font-mono text-[10px] text-neutral-400 leading-tight">
-        <div>
-          Portfolio Status: <span className="text-emerald-400 font-bold">Working</span>
-        </div>
-        <div className="text-[9px] text-neutral-500 font-medium tracking-wide mt-0.5">
-          <SystemClock />
-        </div>
+          ))}
+          <a
+            href={RESUME_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="text-neutral-500 hover:text-neutral-200 transition-colors"
+          >
+            Resume
+          </a>
+        </nav>
       </div>
     </header>
   );

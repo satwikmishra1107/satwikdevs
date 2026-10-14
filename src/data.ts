@@ -1,107 +1,123 @@
-import { Project, Experience, Social } from "./types";
+import { Project, Experience, Social, SkillGroup } from "./types";
 import ProjectOne from "./assets/ProjectOne.png";
 import ProjectTwo from "./assets/ProjectTwo.png";
+import CareerPageMonitor from "./assets/career-page-monitor.png";
+
+export const PROFILE = {
+  name: "Satwik Mishra",
+  role: "Systems Engineer · TCS",
+  summary:
+    "Software engineer building backend systems — core-banking APIs at TCS, and side projects that quietly run themselves.",
+};
+
+// Rewritten to /Resume_Latex.pdf by public/_redirects (and by vite.config.ts locally)
+export const RESUME_URL = "/resume";
+
+// Shown in the contact section with click-to-copy. Leave empty to hide it.
+export const CONTACT_EMAIL = "satwikmishra1107@gmail.com";
 
 export const MANIFESTO = {
-  title: "SOFTWARE, SYSTEMS & CURIOSITY",
+  title: "Software, systems & curiosity.",
   body1:
     "Software engineering with a focus on backend systems, full-stack applications, and solving problems that are a little more complicated than they first appear",
   highlightPhrase: "Performance. Reliability. Simplicity.",
 };
 
+export const ACHIEVEMENTS = [
+  { label: "LeetCode Knight", value: "1882 rating · 500+ problems" },
+  { label: "IIIT Trichy", value: "Coding Club & Web Dev Club Coordinator" },
+];
+
+export const SKILLS: SkillGroup[] = [
+  { label: "Languages", items: ["Java", "TypeScript", "JavaScript", "Python", "SQL", "C++"] },
+  { label: "Backend", items: ["Spring Boot", "Node.js", "Express", "REST", "WebSockets", "OAuth 2.0 / JWT"] },
+  { label: "Frontend", items: ["React", "Next.js", "Redux", "Tailwind", "Vite"] },
+  { label: "Data", items: ["PostgreSQL", "Oracle PL/SQL", "MongoDB", "Supabase", "Firebase"] },
+  { label: "Cloud & DevOps", items: ["AWS EC2 / Lambda", "Cloudflare Workers / Pages", "GitHub Actions"] },
+];
+
+// Newest first
 export const EXPERIENCES: Experience[] = [
   {
-    id: "exp-1",
-    role: "B.Tech. — ECE",
-    company: "IIIT Tiruchirappalli",
-    period: "2020 — 2024",
+    id: "tcs",
+    role: "Systems Engineer — Innovator",
+    company: "Tata Consultancy Services",
+    period: "Nov 2024 — Present",
     highlights: [
-      "A Bachelor's in Electronics & Communication Engineering from an Institute of National Importance",
+      "Designed and shipped PDN Tracker, an internal deployment-management platform replacing a deprecated vendor tool. Release lifecycles are modelled as a state machine with rollback and audit logging; it serves 500+ daily active users.",
+      "Implemented session-based authentication and role-based access control for secure cross-team access, reducing login failures by 35%.",
+      "Migrated 10+ legacy SOAP services on TCS BaNCS — a core banking platform used by banks worldwide — to REST, tracing each transaction's call chain across UI, middleware, and PL/SQL in a 30+ GB codebase to define contracts with behavioural parity.",
+      "Re-architected synchronous transaction callbacks into asynchronous, multi-threaded processing, cutting response latency from 5s+ to 250 ms.",
+      "Root-caused production incidents across application logs, Oracle data, and stored procedures, resolving the data-integrity issues behind the majority of tickets.",
     ],
-    techStack: [
-      "C/C++",
-      "MERN",
-      "Algorithms",
-      "System Design",
-      "Data Structures",
-    ],
-    metrics: [
-      { label: "PROCESS SPEEDUP", value: "4.2X" },
-      { label: "EVENT CONCURRENCY", value: "50K/sec" },
-      { label: "MONITORING AUDIT", value: "REAL-TIME" },
-    ],
+    techStack: ["Java", "Spring Boot", "Oracle PL/SQL", "REST", "React"],
   },
   {
-    id: "exp-2",
-    role: "Systems Engineer",
-    company: "TCS",
-    period: "2024 — PRESENT",
+    id: "iiit",
+    role: "B.Tech, Electronics & Communication Engineering",
+    company: "IIIT Tiruchirappalli",
+    period: "Nov 2020 — Apr 2024",
     highlights: [
-      "Developed a custom Enterprise Resource Management System (ERMS) to govern and track end-to-end Project Delivery Notice workflows, using a scalable, role-based access framework for engineering teams.Migrated legacy API requests to a REST API architecture and implemented Java multithreading, significantly lowering infrastructure costs while increasing query efficiency and backend throughput.",
+      "Coding Club Coordinator — organised competitive programming contests for the campus.",
+      "Web Dev Club Coordinator — led workshops and hackathons to grow the web development culture.",
     ],
-    techStack: ["Java", "Spring Boot", "PL/SQL", "RestAPI", "Linux RHEL"],
-    metrics: [
-      { label: "LATENCY REDUCTION", value: "90%" },
-      { label: "LEGACY MODERNIZATION", value: "CORE SYSTEM" },
-      { label: "THROUGHPUT STABILITY", value: "99.999%" },
-    ],
+    techStack: [],
   },
 ];
 
 export const PROJECTS: Project[] = [
   {
-    id: "proj-1",
-    title: "CHUNKY DISCORD",
-    description: `Was running out of storage and that led to a simple question: why build another storage server when Discord already stores files for free? \n Chunky Discord splits large files into chunks, as there's a rate limit in discord, tags them with a SHA-256 hash for identification and integrity checks, and stores them in a private Discord server. So that you are left with the lightweight metadata which stays on the server, allowing files to be located, verified, reassembled, and retrieved on demand and in realtime.`,
-    tags: ["ReactJS", "NodeJS", "Firebase", "AWS EC2"],
-    thumbnail: ProjectOne,
-    demoUrl: "#",
-    status: "UNDER MAINTENANCE",
-    githubUrl: "https://github.com/satwikmishra1107/ChunkyDiscord",
+    id: "career-monitor",
+    title: "Career Page Monitor",
+    year: "2026",
+    description:
+      "Referrals work best when you ask early. Career Page Monitor watches 120+ company career pages every hour — shared adapters for six ATS platforms (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Personio) plus headless-browser scrapers for custom sites — and sends a Telegram alert only when a genuinely new opening appears.\n\nA Cloudflare Worker cron dispatches the GitHub Actions runs, after GitHub's own scheduler proved unreliable. Postings are deduplicated on (company, job ID), tracked through a React dashboard behind Cloudflare Access, and aged out on a 7-day / 30-day lifecycle to fit inside Supabase's 500 MB free tier.",
+    tags: ["Node.js", "Puppeteer", "PostgreSQL", "React", "Cloudflare Workers", "GitHub Actions"],
+    thumbnail: CareerPageMonitor,
     stats: [
-      { label: "Maximum chunk size", value: "99.998%" },
-      { label: "BLOCK READ LATENCY", value: "1.4ms" },
-      { label: "NODE LIMIT", value: "INFINITE" },
+      { label: "Career pages", value: "120+" },
+      { label: "ATS adapters", value: "6" },
+      { label: "Cadence", value: "Hourly" },
+      { label: "Storage budget", value: "500 MB free tier" },
     ],
   },
   {
-    id: "proj-2",
-    title: "PDN Tracker (ERMS)",
+    id: "chunky-discord",
+    title: "Chunky Discord",
+    subtitle: "Distributed file storage",
+    year: "2024",
     description:
-      "When the existing PDN tracking tool had to be retired because of security concerns, the workflow temporarily fell back to Excel. PDN Tracker was built from scratch to replace it with a role-based system for developers, reviewers, testers, and deployers, taking each delivery from submission through review and deployment while keeping every handoff traceable.",
-    tags: ["NextJS", "Node.js", "MongoDB", "Java/SpringBoot"],
-    thumbnail: ProjectTwo,
-    demoUrl: "#",
-    status: "UNDER MAINTENANCE",
-    githubUrl: "https://github.com/satwikmishra1107/PDN-Tracker",
+      "Running out of storage led to a simple question: why build another storage server when Discord already stores files for free?\n\nChunky Discord splits files into 20 MB chunks to stay under Discord's attachment limit, uploads and downloads them in parallel with retry and backoff, and verifies every chunk with a content hash on reassembly. Chunk metadata lives in Firebase, so the server itself stays stateless.",
+    tags: ["React", "Node.js", "Firebase", "AWS EC2"],
+    thumbnail: ProjectOne,
+    githubUrl: "https://github.com/satwikmishra1107/ChunkyDiscord",
     stats: [
-      { label: "BUILD DEPLOY TIME", value: "<12s" },
-      { label: "ROLLBACK ACCURACY", value: "100.0%" },
-      { label: "TELEMETRY OVERHEAD", value: "<0.8%" },
+      { label: "Chunk size", value: "20 MB" },
+      { label: "Largest file in use", value: "700 MB · 35+ chunks" },
+      { label: "Transfer", value: "Parallel, retry + backoff" },
+      { label: "Integrity", value: "Per-chunk content hash" },
+    ],
+  },
+  {
+    id: "pdn-tracker",
+    title: "PDN Tracker",
+    subtitle: "Built at TCS",
+    description:
+      "When the existing PDN tracking tool had to be retired over security concerns, the workflow fell back to Excel. PDN Tracker replaced it: an internal deployment-management platform that models every release as a state machine — submission, review, testing, deployment — with rollback and audit logging so each handoff stays traceable.",
+    tags: ["React", "Spring Boot", "Oracle PL/SQL"],
+    // Internal company tool: no source link
+    thumbnail: ProjectTwo,
+    stats: [
+      { label: "Daily active users", value: "500+" },
+      { label: "Login failures", value: "−35%" },
+      { label: "Release model", value: "State machine" },
+      { label: "Access", value: "Session auth + RBAC" },
     ],
   },
 ];
 
 export const SOCIALS: Social[] = [
-  {
-    id: "soc-1",
-    name: "LinkedIn",
-    url: "https://www.linkedin.com/in/satwik-mishra-1107-/",
-    iconName: "Linkedin",
-    terminalCommand: "cat /dev/social/linkedin",
-  },
-  {
-    id: "soc-2",
-    name: "GitHub",
-    url: "https://github.com/satwikmishra1107",
-    iconName: "Github",
-    terminalCommand: "cat /dev/social/github",
-  },
-  {
-    id: "soc-3",
-    name: "LeetCode",
-    url: "https://leetcode.com/u/satwik_mishra11/",
-    iconName: "Code",
-    terminalCommand: "cat /dev/social/leetcode",
-  },
+  { id: "linkedin", name: "LinkedIn", url: "https://www.linkedin.com/in/satwik-mishra-1107-/" },
+  { id: "github", name: "GitHub", url: "https://github.com/satwikmishra1107" },
+  { id: "leetcode", name: "LeetCode", url: "https://leetcode.com/u/satwik_mishra11/" },
 ];

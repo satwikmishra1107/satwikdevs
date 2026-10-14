@@ -1,112 +1,56 @@
-import React, { useRef, useLayoutEffect, Suspense, useState, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Canvas } from '@react-three/fiber';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { MANIFESTO } from '../data'; // Update path if needed
-import Portrait from './Portrait';
-
-gsap.registerPlugin(ScrollTrigger);
+import { ACHIEVEMENTS, MANIFESTO, SKILLS } from '../data';
+import SectionLabel from './SectionLabel';
 
 export default function About() {
-
-  const sectionRef = useRef<HTMLElement>(null);
-  const progressRef = useRef(0);
-  const [isVisible, setIsVisible] = useState(false); // was true
-  const [hasEntered, setHasEntered] = useState(false);
-
-  useLayoutEffect(() => {
-    if (!sectionRef.current) return;
-
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: '+=150%',
-        pin: true,
-        scrub: true,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          progressRef.current = self.progress;
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-        if (entry.isIntersecting) setHasEntered(true);
-      },
-      { rootMargin: '30% 0px 30% 0px', threshold: 0 }
-    );
-    observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative h-screen w-full flex items-center bg-[#050505] overflow-hidden"
-    >
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-80 h-80 bg-orange-950/10 rounded-full blur-[140px] pointer-events-none z-0" />
+    <section id="about" className="relative w-full bg-[#050505] ambient-glow py-32">
+      <div className="max-w-7xl mx-auto w-full px-6 md:px-12 xl:px-24">
+        <SectionLabel index="01" title="About" />
 
-      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-        {hasEntered && (
-          <Canvas
-            camera={{ position: [0, 0, 4.5], fov: 50 }}
-            dpr={[1, 1.5]}
-            className="w-full h-full"
-            frameloop={isVisible ? 'always' : 'never'}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          <h2
+            data-reveal
+            className="lg:col-span-5 text-3xl sm:text-4xl font-display font-semibold text-white tracking-tight leading-tight"
           >
-            <ambientLight intensity={1.0} />
-            <Suspense fallback={null}>
-              <Portrait progressRef={progressRef} />
-            </Suspense>
-
-            <EffectComposer multisampling={0}>
-              <Bloom luminanceThreshold={1.0} intensity={0.4} />
-            </EffectComposer>
-          </Canvas>
-        )}
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center h-full pointer-events-none px-6 md:px-12 xl:px-24">
-
-        <div className="hidden lg:block lg:col-span-6 h-full"></div>
-
-        <div className="lg:col-span-6 flex flex-col justify-center pointer-events-auto py-24">
-          <div className="flex items-center gap-2 mb-6">
-            <span className="h-[1px] w-8 bg-orange-500" />
-            <span className="font-mono text-xs tracking-widest text-orange-400">
-              01 // THE ABOUT SECTION
-            </span>
-          </div>
-
-          <h2 className="text-2xl sm:text-4xl font-display font-bold text-white tracking-tight uppercase leading-none mb-8">
             {MANIFESTO.title}
           </h2>
 
-          <div className="space-y-6 font-sans text-neutral-300 font-light leading-relaxed text-sm sm:text-base">
-            <p className="text-neutral-200">
-              {MANIFESTO.body1}
-            </p>
+          <div className="lg:col-span-7 space-y-8 text-neutral-300 font-light leading-relaxed text-base sm:text-lg">
+            <p data-reveal>{MANIFESTO.body1}.</p>
 
-            <blockquote className="border-l-2 border-orange-400 pl-6 my-8 py-2 bg-gradient-to-r from-orange-950/20 to-transparent">
-              <span className="font-sans text-lg sm:text-2xl text-neutral-400 italic block leading-relaxed">
-                <span className="font-display font-bold not-italic text-orange-400 tracking-wide block sm:inline">
-                  {MANIFESTO.highlightPhrase}
-                </span>{' '}
-                "Built for real systems, real users, and 
-                <br></br>real-world constraints"
-              </span>
+            <blockquote data-reveal className="border-l border-orange-400/70 pl-6">
+              <p className="font-display text-white text-lg sm:text-xl not-italic">
+                {MANIFESTO.highlightPhrase}
+              </p>
+              <p className="mt-2 text-neutral-400 text-base">
+                Built for real systems, real users, and real-world constraints.
+              </p>
             </blockquote>
           </div>
+        </div>
+
+        <div className="mt-24 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          <ul data-reveal className="lg:col-span-5 space-y-6">
+            {ACHIEVEMENTS.map((item) => (
+              <li key={item.label}>
+                <div className="font-display text-xl text-white">{item.label}</div>
+                <div className="mt-1 text-sm text-neutral-400">{item.value}</div>
+              </li>
+            ))}
+          </ul>
+
+          <dl data-reveal className="lg:col-span-7 divide-y divide-neutral-900 border-y border-neutral-900">
+            {SKILLS.map((group) => (
+              <div key={group.label} className="grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-6 py-4">
+                <dt className="sm:col-span-4 font-mono text-[11px] tracking-wide text-neutral-500 uppercase pt-0.5">
+                  {group.label}
+                </dt>
+                <dd className="sm:col-span-8 text-sm text-neutral-200">
+                  {group.items.join(' · ')}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

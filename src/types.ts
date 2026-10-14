@@ -1,12 +1,15 @@
 export interface Project {
   id: string;
   title: string;
+  subtitle?: string;
+  year?: string;
   description: string;
   tags: string[];
-  thumbnail: string;
+  // Screenshot, or a pipeline diagram when there's nothing visual to show
+  thumbnail?: string;
+  pipeline?: string[];
   demoUrl?: string;
   githubUrl?: string;
-  status: string;
   stats: { label: string; value: string }[];
 }
 
@@ -17,13 +20,15 @@ export interface Experience {
   period: string;
   highlights: string[];
   techStack: string[];
-  metrics: { label: string; value: string }[];
 }
 
 export interface Social {
   id: string;
   name: string;
   url: string;
-  iconName: string;
-  terminalCommand: string;
+}
+
+export interface SkillGroup {
+  label: string;
+  items: string[];
 }
