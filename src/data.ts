@@ -5,7 +5,7 @@ import CareerPageMonitor from "./assets/career-page-monitor.png";
 
 export const PROFILE = {
   name: "Satwik Mishra",
-  role: "Systems Engineer · TCS",
+  role: "Systems Engineer",
   summary:
     "Software engineer building backend systems in core-banking APIs, and side projects that quietly run themselves.",
 };
