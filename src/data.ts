@@ -7,7 +7,7 @@ export const PROFILE = {
   name: "Satwik Mishra",
   role: "Systems Engineer · TCS",
   summary:
-    "Software engineer building backend systems — core-banking APIs at TCS, and side projects that quietly run themselves.",
+    "Software engineer building backend systems in core-banking APIs, and side projects that quietly run themselves.",
 };
 
 // Rewritten to /Resume_Latex.pdf by public/_redirects (and by vite.config.ts locally)
