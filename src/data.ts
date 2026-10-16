@@ -74,6 +74,8 @@ export const PROJECTS: Project[] = [
       "Referrals work best when you ask early. Career Page Monitor watches 120+ company career pages every hour — shared adapters for six ATS platforms (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Personio) plus headless-browser scrapers for custom sites — and sends a Telegram alert only when a genuinely new opening appears.\n\nA Cloudflare Worker cron dispatches the GitHub Actions runs, after GitHub's own scheduler proved unreliable. Postings are deduplicated on (company, job ID), tracked through a React dashboard behind Cloudflare Access, and aged out on a 7-day / 30-day lifecycle to fit inside Supabase's 500 MB free tier.",
     tags: ["Node.js", "Puppeteer", "PostgreSQL", "React", "Cloudflare Workers", "GitHub Actions"],
     thumbnail: CareerPageMonitor,
+    githubUrl: "https://github.com/satwikmishra1107/110-Dashboard",
+    demoUrl: "https://jobs.satwikdevs.in/",
     stats: [
       { label: "Career pages", value: "120+" },
       { label: "ATS adapters", value: "6" },
