@@ -1,7 +1,26 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import {createHash} from 'crypto';
+import {readFileSync, writeFileSync} from 'fs';
 import path from 'path';
 import {defineConfig, type Connect, type Plugin} from 'vite';
+
+// On build, replaces dist/_redirects so `/resume` redirects to `/Resume_Latex.pdf?v=<hash of the PDF>`.
+// Every new resume gets a new URL, so no browser, PDF viewer or CDN can serve an old copy from cache,
+// while the `/resume` link people already have keeps working.
+function resumeVersionedRedirect(): Plugin {
+  let outDir = 'dist';
+  return {
+    name: 'resume-versioned-redirect',
+    apply: 'build',
+    configResolved: (config) => void (outDir = path.resolve(config.root, config.build.outDir)),
+    closeBundle() {
+      const pdf = readFileSync(path.resolve(__dirname, 'public/Resume_Latex.pdf'));
+      const version = createHash('sha256').update(pdf).digest('hex').slice(0, 10);
+      writeFileSync(path.join(outDir, '_redirects'), `/resume /Resume_Latex.pdf?v=${version} 302\n`);
+    },
+  };
+}
 
 // Mirrors the `/resume` rewrite in public/_redirects so it also works in dev and preview
 function resumeRewrite(): Plugin {
@@ -18,7 +37,7 @@ function resumeRewrite(): Plugin {
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), resumeRewrite()],
+    plugins: [react(), tailwindcss(), resumeRewrite(), resumeVersionedRedirect()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
