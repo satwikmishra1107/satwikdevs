@@ -1,0 +1,200 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+% preamble
+\usepackage{fontawesome5}
+\usepackage{accsupp}
+\newcommand{\hiddenicon}[1]{\BeginAccSupp{method=escape,ActualText={}}#1\EndAccSupp{}}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% If the resume still spills onto a second page, uncomment the next line:
+% \titlespacing*{\section}{0pt}{8pt}{4pt}
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+
+% No space between #1 and \vspace: prevents the empty-line gap
+% when a bullet's text exactly fills a line.
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1\vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+% Placeholder marker: prints in red so no unfilled value slips into the final PDF.
+\newcommand{\fillin}[1]{\textcolor{red}{[#1]}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Satwik Mishra} \\ \vspace{4pt}
+    \small
+    \hiddenicon{\raisebox{-0.1\height}\faPhone}\enspace +91 8690585390
+    \enspace$|$\enspace
+    \href{mailto:satwikmishra1107@gmail.com}{\hiddenicon{\raisebox{-0.2\height}\faEnvelope}\enspace satwikmishra1107@gmail.com}
+    \enspace$|$\enspace
+    \href{https://satwikdevs.in}{\hiddenicon{\raisebox{-0.2\height}\faGlobe}\enspace satwikdevs.in}
+    \enspace$|$\enspace
+    \href{https://www.linkedin.com/in/satwik-mishra-1107-/}{\hiddenicon{\raisebox{-0.2\height}\faLinkedin}\enspace LinkedIn}
+    \enspace$|$\enspace
+    \href{https://github.com/satwikmishra1107}{\hiddenicon{\raisebox{-0.2\height}\faGithub}\enspace GitHub}
+    \enspace$|$\enspace
+    \href{https://leetcode.com/u/satwik_mishra11/}{\hiddenicon{\raisebox{-0.2\height}\faCode}\enspace LeetCode}
+    \vspace{-8pt}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Indian Institute of Information Technology, Tiruchirappalli (IIIT Trichy)}{Nov 2020 -- Apr 2024}
+      {B.Tech, Electronics and Communication Engineering \enspace$|$\enspace Institute of National Importance}{Tiruchirappalli, India}
+  \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+    \textbf{Languages}{: JavaScript, TypeScript, Java, Python, SQL, C++} \\
+    \textbf{Backend}{: Node.js, Express, Spring Boot, REST APIs, WebSockets, OAuth 2.0/JWT, Microservices} \\
+    \textbf{Frontend}{: React (ReactJS), Redux, Next.js, HTML5, CSS3, Tailwind, Vite} \\
+    \textbf{Data}{: PostgreSQL, Oracle (PL/SQL), MongoDB, Supabase, Firebase} \\
+    \textbf{Cloud \& DevOps}{: AWS (EC2, Lambda), Cloudflare (Workers, Pages, D1), CI/CD (GitHub Actions), Git, Postman} \\
+    \textbf{Practices}{: Data Structures \& Algorithms, Distributed Systems, Full-stack web application development, Agile methodologies, Software Development Life Cycle (SDLC)} \\
+    }}
+ \end{itemize}
+ \vspace{-16pt}
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \vspace{-5pt}
+    \resumeSubHeadingListStart
+
+      \resumeProjectHeading
+          {\textbf{Career Page Monitor} $|$ \emph{Node.js, Puppeteer, PostgreSQL (Supabase), React, Cloudflare Workers, GitHub Actions}}{2026}
+          \resumeItemListStart
+            \resumeItem{Built a scraping system for \textbf{120+ company career pages}, with shared adapters for \textbf{6 ATS platforms} (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Personio) and \textbf{headless-browser} scrapers for custom sites.}
+            \resumeItem{Orchestrated \textbf{hourly scheduled runs} via a \textbf{Cloudflare Worker cron} dispatching \textbf{GitHub Actions} workflows, replacing GitHub's native scheduler after its triggers proved unreliable.}
+            \resumeItem{Deduplicated postings in \textbf{PostgreSQL} on a \textbf{composite key} (company, job ID), triggering \textbf{Telegram alerts} only for new openings so referrals can be requested within the hour.}
+            \resumeItem{Built a \textbf{React} dashboard (Vite, Tailwind) on \textbf{Cloudflare Pages} behind \textbf{Cloudflare Access}, tracking each job's application status from interested to referral requested to applied.}
+            \resumeItem{Designed a \textbf{data-retention lifecycle} (7 days visible, then archived, then purged at $\sim$30 days) to stay within Supabase's \textbf{500 MB} free tier.}
+          \resumeItemListEnd
+          \vspace{-13pt}
+
+      \resumeProjectHeading
+          {\textbf{\href{https://chunkydrive.satwikdevs.in}{Chunky Drive} --- Distributed File Storage} $|$ \emph{React, TypeScript, Cloudflare Workers, D1}}{2024 -- 2026}
+          \resumeItemListStart
+            \resumeItem{Built a Google-Drive-style app with \textbf{unlimited storage} on a third-party file network: the browser splits files into \textbf{8 MB chunks} and verifies each with \textbf{SHA-256}, plus a whole-file hash, on reassembly.}
+            \resumeItem{Served the app from a \textbf{Cloudflare Worker} that holds storage credentials and \textbf{streams chunks without buffering}, moving \textbf{3 in parallel} with \textbf{retry and backoff}; \textbf{D1} stores only the chunk map ($\sim$25 MB per TB).}
+            \resumeItem{Made transfers \textbf{pausable and resumable} by persisting verified chunks in \textbf{IndexedDB}, surviving closed tabs and dropped connections, with \textbf{Google OAuth + email OTP} auth and a \textbf{cron} cleaning abandoned uploads.}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+\vspace{-15pt}
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Tata Consultancy Services}{Nov 2024 -- Present}
+      {Systems Engineer --- Innovator (TCS's top engineering hiring track)}{}
+      \resumeItemListStart
+        \resumeItem{Designed and shipped \textbf{PDN Tracker}, an internal \textbf{deployment-management platform} (React, \textbf{Spring Boot}, \textbf{Oracle PL/SQL}) replacing a deprecated vendor tool, modeling release lifecycles as a \textbf{state machine} with rollback and \textbf{audit logging}; serves \textbf{500+ daily active users}.}
+        \resumeItem{Implemented \textbf{session-based authentication} and \textbf{role-based access control (RBAC)} for secure cross-team access, reducing login failures by \textbf{35\%}.}
+        \resumeItem{Migrated \textbf{10+ legacy SOAP services} on \textbf{TCS BaNCS} (core banking platform used by banks worldwide) to \textbf{REST APIs}, tracing each transaction's \textbf{call chain and parameter derivation} across UI, middleware, and \textbf{PL/SQL stored procedures} in a \textbf{30+ GB monolithic codebase} to define \textbf{API contracts} with behavioral parity.}
+        \resumeItem{Re-architected synchronous transaction callbacks into \textbf{asynchronous, multi-threaded} processing, cutting response latency from \textbf{5s+ to 250 ms}.}
+        \resumeItem{Delivered client \textbf{change requests} on the BaNCS workflow, implementing new features and business-rule changes in the \textbf{Java} backend.}
+        \resumeItem{Performed \textbf{root-cause analysis} on production incidents across application logs, Oracle data, and PL/SQL procedures, resolving the \textbf{data-integrity} issues behind the majority of tickets.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+\vspace{-16pt}
+
+%-----------ACHIEVEMENTS & ACTIVITIES-----------
+\section{Achievements \& Activities}
+ \begin{itemize}[leftmargin=0.02in, label={}]
+    \small{\item{
+     \textbf{LeetCode Knight} (achieved 2023, rating \textbf{1882}) --- 500+ problems solved \\
+     \textbf{Coordinator, Coding Club \& Web Dev Club, IIIT Trichy} --- organized coding contests, workshops, and hackathons. \\
+     \textbf{Football} --- midfielder for the cluster team, competed at the \textbf{state level}. \\
+    }}
+ \end{itemize}
+
+\end{document}
