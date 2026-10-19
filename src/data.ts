@@ -29,11 +29,11 @@ export const ACHIEVEMENTS = [
 ];
 
 export const SKILLS: SkillGroup[] = [
-  { label: "Languages", items: ["Java", "TypeScript", "JavaScript", "Python", "SQL", "C++"] },
-  { label: "Backend", items: ["Spring Boot", "Node.js", "Express", "REST", "WebSockets", "OAuth 2.0 / JWT"] },
-  { label: "Frontend", items: ["React", "Next.js", "Redux", "Tailwind", "Vite"] },
-  { label: "Data", items: ["PostgreSQL", "Oracle PL/SQL", "MongoDB", "Supabase", "Firebase"] },
-  { label: "Cloud & DevOps", items: ["AWS EC2 / Lambda", "Cloudflare Workers / Pages", "GitHub Actions"] },
+  { label: "Languages", items: ["JavaScript", "TypeScript", "C++", "Java", "SQL"] },
+  { label: "Backend", items: ["Node.js", "Spring Boot", "REST APIs", "OAuth 2.0 / JWT", "RBAC", "Puppeteer"] },
+  { label: "Frontend", items: ["React", "Tailwind", "IndexedDB"] },
+  { label: "Data", items: ["Oracle (PL/SQL)", "PostgreSQL (Supabase)", "Cloudflare D1"] },
+  { label: "Cloud & DevOps", items: ["Cloudflare (Workers, Pages, Access)", "GitHub Actions CI/CD"] },
 ];
 
 // Newest first
