@@ -44,10 +44,10 @@ export const EXPERIENCES: Experience[] = [
     company: "Tata Consultancy Services",
     period: "Nov 2024 — Present",
     highlights: [
-      "Designed and shipped PDN Tracker, an internal deployment-management platform replacing a deprecated vendor tool. Release lifecycles are modelled as a state machine with rollback and audit logging; it serves 500+ daily active users.",
-      "Implemented session-based authentication and role-based access control for secure cross-team access, reducing login failures by 35%.",
+      "Co-built PDN Tracker, an internal deployment-management platform replacing a deprecated vendor tool and serving 500+ daily active users; owned the frontend and middleware. Release lifecycles are modelled as a table-driven state machine, validated server-side, with send-back reasons and rejected states kept for audit history.",
+      "Replaced manual role selection at login with session-based auth and role-embedded access tokens (RBAC), eliminating wrong-role login failures and cutting total login errors by 35%.",
       "Migrated 10+ legacy SOAP services on TCS BaNCS — a core banking platform used by banks worldwide — to REST, tracing each transaction's call chain across UI, middleware, and PL/SQL in a 30+ GB codebase to define contracts with behavioural parity.",
-      "Re-architected synchronous transaction callbacks into asynchronous, multi-threaded processing, cutting response latency from 5s+ to 250 ms.",
+      "Cut a policy-issuance API from 5s+ (timing out) to 250 ms by parallelizing 5 sequential DB calls on a Java thread pool and adding targeted indexes, with compensating cleanup if any call failed.",
       "Root-caused production incidents across application logs, Oracle data, and stored procedures, resolving the data-integrity issues behind the majority of tickets.",
     ],
     techStack: ["Java", "Spring Boot", "Oracle PL/SQL", "REST", "React"],
@@ -71,7 +71,7 @@ export const PROJECTS: Project[] = [
     title: "Career Page Monitor",
     year: "2026",
     description:
-      "Referrals work best when you ask early. Career Page Monitor watches 120+ company career pages every hour — shared adapters for six ATS platforms (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Personio) plus headless-browser scrapers for custom sites — and sends a Telegram alert only when a genuinely new opening appears.\n\nA Cloudflare Worker cron dispatches the GitHub Actions runs, after GitHub's own scheduler proved unreliable. Postings are deduplicated on (company, job ID), tracked through a React dashboard behind Cloudflare Access, and aged out on a 7-day / 30-day lifecycle to fit inside Supabase's 500 MB free tier.",
+      "Referrals work best when you ask early. Career Page Monitor watches 120+ company career pages every hour — shared adapters for six ATS platforms (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Personio) plus headless-browser scrapers for custom sites — and sends a Telegram alert only when a genuinely new opening appears.\n\nA Cloudflare Worker cron dispatches the GitHub Actions runs, after GitHub's own scheduler proved unreliable. Postings are deduplicated on (company, job ID, title), tracked through a React dashboard behind Cloudflare Access, and aged out on a 7-day / 30-day lifecycle to fit inside Supabase's 500 MB free tier.",
     tags: ["Node.js", "Puppeteer", "PostgreSQL", "React", "Cloudflare Workers", "GitHub Actions"],
     thumbnail: CareerPageMonitor,
     githubUrl: "https://github.com/satwikmishra1107/110-Dashboard",
@@ -86,7 +86,7 @@ export const PROJECTS: Project[] = [
   {
     id: "chunky-drive",
     title: "Chunky Drive",
-    subtitle: "Distributed file storage",
+    subtitle: "Chunked file storage",
     year: "2024 — 2026",
     description:
       "Running out of storage led to a simple question: why build another storage server when third-party networks already store files for free?\n\nChunky Drive is a Google-Drive-style app with unlimited storage. The browser splits each file into 8 MB chunks, hashes them with SHA-256, and moves three at a time through a Cloudflare Worker that holds the storage credentials and streams bytes straight through. D1 keeps only the chunk map — about 25 MB of metadata per terabyte stored. Every chunk is re-verified on download and saved to IndexedDB, so downloads pause, survive a closed tab, and resume from the last verified chunk.",
@@ -106,13 +106,13 @@ export const PROJECTS: Project[] = [
     title: "PDN Tracker",
     subtitle: "Built at TCS",
     description:
-      "When the existing PDN tracking tool had to be retired over security concerns, the workflow fell back to Excel. PDN Tracker replaced it: an internal deployment-management platform that models every release as a state machine — submission, review, testing, deployment — with rollback and audit logging so each handoff stays traceable.",
+      "When the existing PDN tracking tool had to be retired over security concerns, the workflow fell back to Excel. PDN Tracker replaced it: an internal deployment-management platform that models every release as a table-driven state machine — draft, review, testing, delivery, release — validated server-side, with send-back reasons and audit history so each handoff stays traceable.",
     tags: ["React", "Spring Boot", "Oracle PL/SQL"],
     // Internal company tool: no source link
     thumbnail: ProjectTwo,
     stats: [
       { label: "Daily active users", value: "500+" },
-      { label: "Login failures", value: "−35%" },
+      { label: "Login errors", value: "−35%" },
       { label: "Release model", value: "State machine" },
       { label: "Access", value: "Session auth + RBAC" },
     ],
