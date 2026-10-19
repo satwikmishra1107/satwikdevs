@@ -153,7 +153,7 @@
           \resumeItemListStart
             \resumeItem{Built a scraping system for \textbf{120+ company career pages}, with shared adapters for \textbf{6 ATS platforms} (Workday, Greenhouse, Lever, Ashby, SmartRecruiters, Personio) and \textbf{headless-browser} scrapers for custom sites.}
             \resumeItem{Orchestrated \textbf{hourly runs} via a \textbf{Cloudflare Worker cron} dispatching \textbf{GitHub Actions} workflows, after GitHub's native scheduler ran only 3--4 times a day under load.}
-            \resumeItem{Made runs \textbf{idempotent} with a \textbf{unique constraint} on (company, job ID, title) in \textbf{PostgreSQL}, sending \textbf{Telegram alerts} only for new openings so referrals can be requested within the hour.}
+            \resumeItem{Made runs \textbf{idempotent} with a \textbf{unique constraint} on (company, job ID) in \textbf{PostgreSQL}, sending \textbf{Telegram alerts} only for new openings so referrals can be requested within the hour.}
             \resumeItem{Kept the database inside \textbf{Supabase's 500 MB free tier} by aging out postings on a \textbf{7-day / 30-day lifecycle}, so the system runs at \textbf{zero hosting cost}.}
             \resumeItem{Built a \textbf{React} dashboard on \textbf{Cloudflare Pages} behind \textbf{Cloudflare Access}, tracking each job from interested to applied, with a \textbf{scraper-health panel} flagging timed-out or failing sources.}
           \resumeItemListEnd
